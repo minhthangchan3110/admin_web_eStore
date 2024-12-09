@@ -95,6 +95,7 @@ export default function ModalAddProduct({ visible, onClose }) {
       formData.append("proSubCategoryId", values.proSubCategoryId);
       formData.append("proBrandId", values.proBrandId);
       formData.append("proVariantTypeId", values.proVariantTypeId);
+      formData.append("specifications", values.specifications);
 
       // Find selected variant names
       const selectedVariants = filteredVariants.filter((variant) =>
@@ -179,6 +180,22 @@ export default function ModalAddProduct({ visible, onClose }) {
           />
         </Form.Item>
 
+        <Form.Item
+          name="specifications"
+          rules={[
+            {
+              required: true,
+              message: "Please input the product specifications!",
+            },
+          ]}
+        >
+          <TextArea
+            rows={4}
+            className="font-montserrat p-2"
+            placeholder="Product Specifications"
+          />
+        </Form.Item>
+
         <div className="flex justify-between gap-2 font-montserrat">
           <Form.Item name="proCategoryId" className="w-1/3">
             <select
@@ -220,6 +237,7 @@ export default function ModalAddProduct({ visible, onClose }) {
             </select>
           </Form.Item>
         </div>
+
         <div className="flex gap-2">
           <Form.Item
             className="w-1/3"
@@ -245,6 +263,7 @@ export default function ModalAddProduct({ visible, onClose }) {
             <Input className="font-montserrat p-2" placeholder="Quantity" />
           </Form.Item>
         </div>
+
         <div className="flex justify-between gap-2">
           <Form.Item name="proVariantTypeId" className="w-1/2">
             <select
@@ -280,6 +299,7 @@ export default function ModalAddProduct({ visible, onClose }) {
           </Button>
         </Form.Item>
       </Form>
+
       <Modal
         open={previewVisible}
         title={previewTitle}

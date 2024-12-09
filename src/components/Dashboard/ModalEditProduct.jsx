@@ -7,7 +7,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 export default function ModalEditProduct({ visible, onClose, productId }) {
-  const [form] = Form.useForm(); // Tạo form instance để set giá trị
+  const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
@@ -74,7 +74,11 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
             }));
 
           setProductVariants(productVariantsWithNames);
-
+          const formattedSpecifications = productData.specifications
+            ? Object.entries(productData.specifications)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join("\n") // Nối các cặp khóa-giá trị với dấu xuống dòng
+            : "";
           form.setFieldsValue({
             name: productData.name,
             description: productData.description,
@@ -94,6 +98,7 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
               status: "done",
               url: image.url,
             })),
+            specifications: formattedSpecifications, // Assuming specifications are part of productData
           });
 
           setFileList(
@@ -155,7 +160,13 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
       formData.append("proBrandId", values.proBrandId);
       formData.append("proVariantTypeId", values.proVariantTypeId);
 
-      // Chuyển đổi các tên biến thể thành ID và đưa vào proVariantId
+      // Kiểm tra và thêm 'specifications' vào formData nếu có
+      if (values.specifications && values.specifications.trim() !== "") {
+        formData.append("specifications", values.specifications);
+      } else {
+        formData.append("specifications", ""); // Nếu không có, để giá trị mặc định là chuỗi rỗng
+      }
+
       formData.append(
         "proVariantId",
         JSON.stringify(
@@ -166,25 +177,22 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
         )
       );
 
-      // Thêm ảnh mới vào FormData
       fileList.forEach((file, index) => {
         formData.append(`image${index + 1}`, file.originFileObj);
       });
 
-      // Debug: In ra dữ liệu để kiểm tra
       console.log("FormData contents:");
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
 
-      // Gửi yêu cầu cập nhật sản phẩm
       await axios.put(`http://localhost:3000/products/${productId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       message.success("Cập nhật sản phẩm thành công");
-      onClose(); // Đóng modal sau khi cập nhật thành công
+      onClose();
     } catch (error) {
       console.error("Error:", error);
       message.error("Cập nhật sản phẩm thất bại");
@@ -207,7 +215,6 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
       proVariantId: validSelectedVariants,
     });
   };
-
   return (
     <Modal
       title="Edit Product"
@@ -256,6 +263,16 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
             className=" font-montserrat"
             rows={4}
             placeholder="Product Description"
+          />
+        </Form.Item>
+        <Form.Item
+          name="specifications"
+          label={<span className="font-montserrat">Specifications</span>}
+        >
+          <TextArea
+            className="font-montserrat"
+            rows={4}
+            placeholder="Product Specifications"
           />
         </Form.Item>
 

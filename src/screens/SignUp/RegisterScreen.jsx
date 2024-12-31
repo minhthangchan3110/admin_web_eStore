@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function RegisterScreen() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,7 +28,6 @@ export default function RegisterScreen() {
     e.preventDefault();
     setError("");
     console.log("Dữ liệu gửi đi:", {
-      name,
       password,
       confirmPassword,
       email,
@@ -57,7 +56,6 @@ export default function RegisterScreen() {
       const response = await axios.post(
         "http://localhost:3000/users/register",
         {
-          name,
           password,
           confirmPassword,
           email,
@@ -83,24 +81,7 @@ export default function RegisterScreen() {
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               {error && <p className="text-red-500">{error}</p>}
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your username
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="Username"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
+
               <div>
                 <label
                   htmlFor="email"

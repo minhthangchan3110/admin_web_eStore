@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Upload, Button } from "antd";
+import { Modal, Form, Input, Upload, Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 
@@ -54,10 +54,26 @@ export default function ModalAddCategory({ visible, onClose }) {
       );
 
       console.log("API Response:", response.data);
+      message.success({
+        content: (
+          <span className="font-montserrat">Thêm danh mục thành công</span>
+        ),
+        className: "font-montserrat",
+      });
+
       onClose(); // Đóng modal sau khi thêm thành công
       form.resetFields(); // Reset form sau khi submit thành công
       setFileList([]); // Reset danh sách file sau khi submit thành công
     } catch (error) {
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Thêm danh mục không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
+
       console.error("API Error:", error);
     }
   };

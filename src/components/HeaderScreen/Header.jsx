@@ -59,18 +59,8 @@ export default function Header() {
 
   return (
     <div className="w-full bg-white font-montserrat">
-      <div className="w-full flex px-2 py-4 justify-between items-center">
-        <div className="text-xl font-semibold">Dashboard</div>
-        <div className="flex gap-4">
-          <div className="flex border items-center justify-center p-2 rounded-lg">
-            <input
-              className="font-semibold focus:outline-none"
-              placeholder="Search"
-            />
-            <div className="bg-blue-500 p-1 rounded-lg">
-              <CiSearch color="white" size={16} />
-            </div>
-          </div>
+      <div className="w-full flex px-4 py-4 justify-end items-center">
+        <div className="flex gap-4 ">
           <div
             className="cursor-pointer flex items-center justify-center gap-2 border rounded-lg p-2 relative"
             onClick={toggleDropdown}

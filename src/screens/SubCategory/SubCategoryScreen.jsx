@@ -1,14 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
-import { Modal, Space, Table, Tag, message } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Input, Modal, Space, Table, Tag, message } from "antd";
 import { IoIosAdd } from "react-icons/io";
 import { MdEdit, MdDelete } from "react-icons/md";
 import axios from "axios";
+import { SearchOutlined } from "@ant-design/icons";
 import ModalAddSub from "../../components/SubCategory/ModalAddSub";
 import ModalEditSub from "../../components/SubCategory/ModalEditSub";
 const SubCategoryScreen = () => {
   const [data, setData] = useState([]);
   const [isModalAdd, setIsModalAdd] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
 
@@ -26,6 +29,94 @@ const SubCategoryScreen = () => {
     setIsModalEdit(false);
     setSelectedSubCategoryId(null);
   };
+
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    filterDropdownProps: {
+      onOpenChange(open) {
+        if (open) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <span style={{ backgroundColor: "#ffc069" }}>{text}</span>
+      ) : (
+        text
+      ),
+  });
+
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:3000/subcategories");
@@ -59,18 +150,21 @@ const SubCategoryScreen = () => {
       dataIndex: "name",
       key: "name",
       className: "font-montserrat",
+      ...getColumnSearchProps("name"),
       render: (text) => <a className="font-montserrat">{text}</a>,
     },
     {
       title: "Category",
       dataIndex: "category",
       key: "category",
+      ...getColumnSearchProps("category"),
       className: "font-montserrat",
     },
     {
       title: "Added Date",
       dataIndex: "createdAt",
       key: "createdAt",
+      ...getColumnSearchProps("createAt"),
       className: "font-montserrat",
 
       render: (createdAt) => {

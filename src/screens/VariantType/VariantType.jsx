@@ -1,17 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
-import { Modal, Space, Table, message } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Input, Modal, Space, Table, message } from "antd";
 import { IoIosAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
 import axios from "axios";
 import ModalAddVariantType from "../../components/VariantType/ModalAddVariantType";
 import ModalEditVariantType from "../../components/VariantType/ModalEditVariantType";
-
+import { SearchOutlined } from "@ant-design/icons";
 const VariantTypeScreen = () => {
   const [data, setData] = useState([]);
   const [isModalAdd, setIsModalAdd] = useState(false);
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [selectedVaritantType, setSelectedVaritantType] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
   ////
   const handleOpenAdd = () => {
     setIsModalAdd(true);
@@ -28,6 +31,91 @@ const VariantTypeScreen = () => {
     setIsModalEdit(false);
     setSelectedVaritantType(null);
   };
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    filterDropdownProps: {
+      onOpenChange(open) {
+        if (open) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <span style={{ backgroundColor: "#ffc069" }}>{text}</span>
+      ) : (
+        text
+      ),
+  });
 
   /////
   const fetchData = async () => {
@@ -102,18 +190,21 @@ const VariantTypeScreen = () => {
       title: "Variant Name",
       dataIndex: "name",
       key: "name",
+      ...getColumnSearchProps("name"),
       className: "font-montserrat",
       render: (text) => <a className="font-montserrat">{text}</a>,
     },
     {
       title: "Variant Type",
       dataIndex: "type",
+      ...getColumnSearchProps("type"),
       key: "type",
       className: "font-montserrat",
     },
     {
       title: "Added Date",
       dataIndex: "createdAt",
+      ...getColumnSearchProps("createdAt"),
       key: "createdAt",
       className: "font-montserrat",
 

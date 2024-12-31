@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Upload } from "antd";
+import { Button, Form, Input, Modal, Upload, message } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
@@ -53,9 +53,23 @@ export default function ModalAddPoster({ visible, onClose }) {
 
       console.log("API Response:", response.data);
       onClose(); // Đóng modal sau khi thêm thành công
+      message.success({
+        content: (
+          <span className="font-montserrat">Thêm danh mục thành công</span>
+        ),
+        className: "font-montserrat",
+      });
       form.resetFields(); // Reset form sau khi submit thành công
       setFileList([]); // Reset danh sách file sau khi submit thành công
     } catch (error) {
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Thêm danh mục không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       console.error("API Error:", error);
     }
   };

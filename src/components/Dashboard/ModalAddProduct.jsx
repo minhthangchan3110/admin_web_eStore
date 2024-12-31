@@ -94,18 +94,25 @@ export default function ModalAddProduct({ visible, onClose }) {
       formData.append("proCategoryId", values.proCategoryId);
       formData.append("proSubCategoryId", values.proSubCategoryId);
       formData.append("proBrandId", values.proBrandId);
-      formData.append("proVariantTypeId", values.proVariantTypeId);
+
+      // Only append variant type if it is not null
+      if (values.proVariantTypeId) {
+        formData.append("proVariantTypeId", values.proVariantTypeId);
+      }
+
       formData.append("specifications", values.specifications);
 
-      // Find selected variant names
-      const selectedVariants = filteredVariants.filter((variant) =>
-        values.proVariantId.includes(variant._id)
-      );
-      selectedVariants.forEach((variant, index) => {
-        formData.append(`variantName${index + 1}`, variant.name);
-      });
+      // Only append variant names if selected variants are not null
+      if (values.proVariantId && values.proVariantId.length > 0) {
+        const selectedVariants = filteredVariants.filter((variant) =>
+          values.proVariantId.includes(variant._id)
+        );
+        selectedVariants.forEach((variant, index) => {
+          formData.append(`variantName${index + 1}`, variant.name);
+        });
 
-      formData.append("proVariantId", values.proVariantId);
+        formData.append("proVariantId", values.proVariantId);
+      }
 
       const response = await axios.post(
         "http://localhost:3000/products",

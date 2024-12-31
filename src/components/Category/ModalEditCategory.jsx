@@ -83,14 +83,26 @@ export default function ModalEditCategory({ visible, onClose, categoryId }) {
         }
       );
 
-      message.success("Cập nhật danh mục thành công");
+      message.success({
+        content: (
+          <span className="font-montserrat">Cập nhật danh mục thành công</span>
+        ),
+        className: "font-montserrat",
+      });
       onClose();
     } catch (error) {
       console.error(
         "Error updating category:",
         error.response?.data || error.message
       );
-      message.error("Cập nhật danh mục không thành công!");
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Cập nhật danh mục không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
     }
   };
 

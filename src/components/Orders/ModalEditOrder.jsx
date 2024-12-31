@@ -67,7 +67,8 @@ export default function ModalEditOrder({ visible, orderId, onClose }) {
           <div className="flex justify-start w-1/2">
             User ID:{" "}
             <span className="px-4 font-semibold">
-              {form.getFieldValue("userID")}
+              {form.getFieldValue("userID")?.name ||
+                form.getFieldValue("userID")}
             </span>
           </div>
           <div className="flex justify-start w-1/2">

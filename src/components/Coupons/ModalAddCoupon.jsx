@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Modal, DatePicker, Button } from "antd";
+import { Form, Input, Modal, DatePicker, Button, message } from "antd";
 import axios from "axios";
 
 export default function ModalAddCoupon({ visible, onClose }) {
@@ -35,9 +35,23 @@ export default function ModalAddCoupon({ visible, onClose }) {
         values
       );
       console.log("API Responsive: ", response.data);
+      message.success({
+        content: (
+          <span className="font-montserrat">Thêm mã giảm giá thành công</span>
+        ),
+        className: "font-montserrat",
+      });
       onClose();
       form.resetFields();
     } catch (error) {
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Thêm mã giảm giá không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       console.error("API error", error);
     }
   };

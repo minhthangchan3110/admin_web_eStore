@@ -80,14 +80,27 @@ export default function ModalEditPoster({ visible, onClose, posterId }) {
         },
       });
 
-      message.success("Cập nhật poster thành công"); // Sửa thông báo cho đúng ngữ cảnh
+      message.success({
+        content: (
+          <span className="font-montserrat">Cập nhật poster thành công</span>
+        ),
+        className: "font-montserrat",
+      }); // Sửa thông báo cho đúng ngữ cảnh
+
       onClose();
     } catch (error) {
       console.error(
         "Error updating poster:",
         error.response?.data || error.message
       );
-      message.error("Cập nhật poster không thành công!"); // Sửa thông báo cho đúng ngữ cảnh
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Cập nhật poster không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      }); // Sửa thông báo cho đúng ngữ cảnh
     }
   };
 

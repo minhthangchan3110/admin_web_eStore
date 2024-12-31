@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -39,9 +39,25 @@ export default function ModalEditUser({ visible, onClose, userId }) {
         values
       );
       console.log("API Response:", response.data);
+      message.success({
+        content: (
+          <span className="font-montserrat">
+            Cập nhật role người dùng thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       onClose();
       form.resetFields();
     } catch (error) {
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Cập nhật role người dùng không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       console.error("API Error:", error);
     }
   };

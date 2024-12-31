@@ -47,7 +47,7 @@ const items = [
   getItem(<Link to="/order">Orders</Link>, "orders", <CiUser />),
   getItem(<Link to="/coupon">Coupons</Link>, "coupon", <RiCoupon2Line />),
   getItem(<Link to="/poster">Posters</Link>, "poster", <FaRegBookmark />),
-  getItem("Notifications", "noti", <FiBell />),
+  // getItem("Notifications", "noti", <FiBell />),
   getItem(<Link to="/user">User</Link>, "user", <CiUser />),
 ];
 

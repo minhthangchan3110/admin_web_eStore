@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -30,9 +30,24 @@ export default function ModalAddSub({ visible, onClose }) {
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);
+      message.success({
+        content: (
+          <span className="font-montserrat">Thêm danh mục thành công</span>
+        ),
+        className: "font-montserrat",
+      });
+
       onClose(); // Đóng modal sau khi thêm thành công
       form.resetFields(); // Reset form sau khi submit thành công
     } catch (error) {
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Thêm danh mục không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       console.error("API Error:", error);
     }
   };

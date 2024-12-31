@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Modal } from "antd";
+import { Button, DatePicker, Form, Input, Modal, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import moment from "moment"; // Import moment.js
@@ -90,9 +90,25 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
         updatedValues
       );
       console.log("API Responsive: ", response.data);
+      message.success({
+        content: (
+          <span className="font-montserrat">
+            Cập nhật mã giảm giá thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       onClose();
       form.resetFields();
     } catch (error) {
+      message.error({
+        content: (
+          <span className="font-montserrat">
+            Cập nhật mã giảm giá không thành công
+          </span>
+        ),
+        className: "font-montserrat",
+      });
       console.error("API error", error);
     }
   };

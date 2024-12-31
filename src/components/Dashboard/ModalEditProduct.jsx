@@ -172,7 +172,7 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
         JSON.stringify(
           values.proVariantId.map((name) => {
             const variant = variants.find((v) => v.name === name);
-            return variant ? variant._id : null;
+            return variant ? variant._id : null; // Sử dụng _id thay vì name
           })
         )
       );

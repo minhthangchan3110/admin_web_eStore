@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcMultipleDevices } from "react-icons/fc";
 import { MdMoreVert } from "react-icons/md";
 import { IoIosAdd } from "react-icons/io";
@@ -6,9 +6,12 @@ import { IoReload } from "react-icons/io5";
 import TableScreen from "../../components/Dashboard/Table";
 import DonutChart from "../../components/Dashboard/DonutChart";
 import ModalAddProduct from "../../components/Dashboard/ModalAddProduct";
+import axios from "axios";
+import { message } from "antd";
 
 export default function DashboardScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [data, setData] = useState([]);
 
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -18,30 +21,68 @@ export default function DashboardScreen() {
     setIsModalVisible(false);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/products");
+
+        console.log("Dữ liệu nhận được từ API:", response.data);
+
+        if (Array.isArray(response.data.data)) {
+          const formattedData = response.data.data.map((product) => ({
+            key: product._id,
+            quantity: product.quantity,
+            name: product.name,
+          }));
+
+          setData(formattedData);
+        } else {
+          console.error("Dữ liệu không phải là một mảng");
+          message.error("Dữ liệu nhận được không đúng định dạng");
+        }
+      } catch (error) {
+        console.error(error);
+        message.error("Đã xảy ra lỗi khi lấy dữ liệu");
+      } finally {
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const totalProducts = data.length;
+
+  // Tính toán phần trăm progress cho từng loại sản phẩm
+  const outOfStock = data.filter((product) => product.quantity === 0).length;
+  const limitedStock = data.filter(
+    (product) => product.quantity > 0 && product.quantity < 5
+  ).length;
+  const otherStock = data.filter((product) => product.quantity >= 5).length;
+
   const myProduct = [
     {
       name: "All Product",
-      quantity: "18",
+      quantity: totalProducts,
       color: "bg-blue-600",
-      progress: "45%",
+      progress: `${((totalProducts / totalProducts) * 100).toFixed(0)}%`, // All Products: 100% (đảm bảo không chia cho 0)
     },
     {
       name: "Out of Stock",
-      quantity: "5",
+      quantity: outOfStock,
       color: "bg-red-600",
-      progress: "10%",
+      progress: `${((outOfStock / totalProducts) * 100).toFixed(0)}%`,
     },
     {
       name: "Limited Stock",
-      quantity: "8",
+      quantity: limitedStock,
       color: "bg-yellow-600",
-      progress: "30%",
+      progress: `${((limitedStock / totalProducts) * 100).toFixed(0)}%`,
     },
     {
       name: "Other Stock",
-      quantity: "18",
+      quantity: otherStock,
       color: "bg-green-600",
-      progress: "75%",
+      progress: `${((otherStock / totalProducts) * 100).toFixed(0)}%`,
     },
   ];
 
@@ -99,14 +140,13 @@ export default function DashboardScreen() {
         </section>
         <section className="bg-white rounded-lg p-4">
           <div className="font-semibold text-lg">All Products</div>
-          <TableScreen />
+          <TableScreen data={data} />
         </section>
       </div>
       <div className="col-span-1 bg-white rounded-lg p-4 flex flex-col gap-6">
         <DonutChart />
       </div>
 
-      {/* Hiển thị Modal khi isModalVisible là true */}
       <ModalAddProduct visible={isModalVisible} onClose={handleCloseModal} />
     </div>
   );

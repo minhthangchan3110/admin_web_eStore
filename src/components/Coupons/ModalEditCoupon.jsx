@@ -8,15 +8,19 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
   const [subCategories, setSubCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [couponCode, setCouponCode] = useState([]);
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [categoriesRes, subCategoriesRes, productsRes] =
           await Promise.all([
-            axios.get("http://localhost:3000/categories"),
-            axios.get("http://localhost:3000/subcategories"),
-            axios.get("http://localhost:3000/products"),
+            axios.get(`${API_URL}/categories`),
+            axios.get(`${API_URL}/subcategories`),
+            axios.get(`${API_URL}/products`),
           ]);
         setCategories(categoriesRes.data.data);
         setSubCategories(subCategoriesRes.data.data);
@@ -32,7 +36,7 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
       const fetchCouponCodeData = async () => {
         try {
           const couponCodeRes = await axios.get(
-            `http://localhost:3000/couponcodes/${couponCodeId}`
+            `${API_URL}/couponcodes/${couponCodeId}`
           );
 
           const couponData = couponCodeRes.data.data; // Lấy dữ liệu coupon
@@ -86,7 +90,7 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
     try {
       console.log("Sending data:", updatedValues);
       const response = await axios.put(
-        `http://localhost:3000/couponcodes/${couponCodeId}`, // Sửa URL nếu cần dùng edit
+        `${API_URL}/couponcodes/${couponCodeId}`, // Sửa URL nếu cần dùng edit
         updatedValues
       );
       console.log("API Responsive: ", response.data);

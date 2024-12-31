@@ -18,7 +18,10 @@ const Orders = () => {
     setIsModalEdit(true);
     setSelectedOrderId(orderId);
   };
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const handleCloseModalEdit = () => {
     setIsModalEdit(false);
     setSelectedOrderId(null);
@@ -111,7 +114,7 @@ const Orders = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/orders");
+      const response = await axios.get(`${API_URL}/orders`);
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -221,7 +224,7 @@ const Orders = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/orders/${key}`);
+          await axios.delete(`${API_URL}/orders/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

@@ -10,12 +10,15 @@ export default function ModalEditCategory({ visible, onClose, categoryId }) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const handleCancel = () => setPreviewVisible(false);
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   useEffect(() => {
     if (visible && categoryId) {
       // Fetch existing category details
       axios
-        .get(`http://localhost:3000/categories/${categoryId}`)
+        .get(`${API_URL}/categories/${categoryId}`)
         .then((response) => {
           const { name, image } = response.data.data;
           console.log("Fetched category data:", response.data.data); // Log dữ liệu danh mục
@@ -66,22 +69,16 @@ export default function ModalEditCategory({ visible, onClose, categoryId }) {
         const file = fileList[0];
         formData.append("img", file.originFileObj);
       } else {
-        const response = await axios.get(
-          `http://localhost:3000/categories/${categoryId}`
-        );
+        const response = await axios.get(`${API_URL}/categories/${categoryId}`);
         image = response.data.data.image;
         formData.append("image", image);
       }
 
-      await axios.put(
-        `http://localhost:3000/categories/${categoryId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.put(`${API_URL}/categories/${categoryId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       message.success({
         content: (

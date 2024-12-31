@@ -16,7 +16,10 @@ export default function ModalAddProduct({ visible, onClose }) {
   const [variants, setVariants] = useState([]);
   const [filteredVariants, setFilteredVariants] = useState([]);
   const [selectedVariantType, setSelectedVariantType] = useState("");
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
@@ -49,11 +52,11 @@ export default function ModalAddProduct({ visible, onClose }) {
           variantTypesRes,
           variantsRes,
         ] = await Promise.all([
-          axios.get("http://localhost:3000/categories"),
-          axios.get("http://localhost:3000/subCategories"),
-          axios.get("http://localhost:3000/brands"),
-          axios.get("http://localhost:3000/variantTypes"),
-          axios.get("http://localhost:3000/variants"),
+          axios.get(`${API_URL}/categories`),
+          axios.get(`${API_URL}/subCategories`),
+          axios.get(`${API_URL}/brands`),
+          axios.get(`${API_URL}/variantTypes`),
+          axios.get(`${API_URL}/variants`),
         ]);
 
         setCategories(categoriesRes.data.data);
@@ -114,15 +117,11 @@ export default function ModalAddProduct({ visible, onClose }) {
         formData.append("proVariantId", values.proVariantId);
       }
 
-      const response = await axios.post(
-        "http://localhost:3000/products",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${API_URL}/products`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("API Response:", response.data);
       onClose();

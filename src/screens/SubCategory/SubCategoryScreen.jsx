@@ -14,7 +14,10 @@ const SubCategoryScreen = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(null);
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const handleOpenAdd = () => {
     setIsModalAdd(true);
   };
@@ -119,7 +122,7 @@ const SubCategoryScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/subcategories");
+      const response = await axios.get(`${API_URL}/subcategories`);
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -209,7 +212,7 @@ const SubCategoryScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/subcategories/${key}`);
+          await axios.delete(`${API_URL}/subcategories/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

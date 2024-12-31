@@ -12,11 +12,14 @@ export default function DonutChart() {
     { name: "Shipped Orders", color: "#6366f1" },
     { name: "Delivered Orders", color: "#9333ea" },
   ];
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/orders"); // Địa chỉ API của bạn
+        const response = await axios.get(`${API_URL}/orders`); // Địa chỉ API của bạn
         if (response.data.success) {
           // Lấy dữ liệu trạng thái đơn hàng từ API
           const orders = response.data.data;

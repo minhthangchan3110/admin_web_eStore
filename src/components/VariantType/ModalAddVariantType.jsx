@@ -4,13 +4,17 @@ import React from "react";
 
 export default function ModalAddVariantType({ visible, onClose }) {
   const [form] = Form.useForm();
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const onFinish = async (values) => {
     try {
       // Log dữ liệu gửi đi
       console.log("Sending data:", values);
 
       const response = await axios.post(
-        "http://localhost:3000/varianttypes",
+        `${API_URL}/varianttypes`,
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);

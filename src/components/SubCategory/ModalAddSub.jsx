@@ -5,13 +5,14 @@ import React, { useEffect, useState } from "react";
 export default function ModalAddSub({ visible, onClose }) {
   const [form] = Form.useForm();
   const [categories, setCategories] = useState([]);
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoriesRes = await axios.get(
-          "http://localhost:3000/categories"
-        );
+        const categoriesRes = await axios.get(`${API_URL}/categories`);
         setCategories(categoriesRes.data.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -26,7 +27,7 @@ export default function ModalAddSub({ visible, onClose }) {
       console.log("Sending data:", values);
 
       const response = await axios.post(
-        "http://localhost:3000/subcategories",
+        `${API_URL}/subcategories`,
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);

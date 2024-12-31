@@ -5,13 +5,14 @@ import React, { useEffect, useState } from "react";
 export default function ModalAddVariants({ visible, onClose }) {
   const [form] = Form.useForm();
   const [variantType, setVariantType] = useState([]);
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const variantTypesRes = await axios.get(
-          "http://localhost:3000/variantTypes"
-        );
+        const variantTypesRes = await axios.get(`${API_URL}/variantTypes`);
         setVariantType(variantTypesRes.data.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -26,7 +27,7 @@ export default function ModalAddVariants({ visible, onClose }) {
       console.log("Sending data:", values);
 
       const response = await axios.post(
-        "http://localhost:3000/variants",
+        `${API_URL}/variants`,
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);

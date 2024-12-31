@@ -13,7 +13,10 @@ export default function Header() {
   const [isModalAdd, setIsModalAdd] = useState(false);
   const [isSelectedUserId, setIsSelectedUserId] = useState(null);
   const [username, setUsername] = useState("");
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     const storedUserId = localStorage.getItem("userId");
@@ -30,7 +33,7 @@ export default function Header() {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/users/${userId}`);
+      const response = await axios.get(`${API_URL}/users/${userId}`);
 
       // Sử dụng avatar từ DB hoặc avatar mặc định
     } catch (error) {

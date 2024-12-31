@@ -14,6 +14,10 @@ const Variants = () => {
   const [selectedVariantsId, setSelectedVariantsId] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const searchInput = useRef(null);
   const handleOpenAdd = () => {
     setIsModalAdd(true);
@@ -117,7 +121,7 @@ const Variants = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/variants");
+      const response = await axios.get(`${API_URL}/variants`);
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -211,7 +215,7 @@ const Variants = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/variants/${key}`);
+          await axios.delete(`${API_URL}/variants/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

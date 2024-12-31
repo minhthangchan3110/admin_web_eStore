@@ -23,7 +23,10 @@ export default function RegisterScreen() {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
     return re.test(password);
   };
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -53,14 +56,11 @@ export default function RegisterScreen() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/users/register",
-        {
-          password,
-          confirmPassword,
-          email,
-        }
-      );
+      const response = await axios.post(`${API_URL}/users/register`, {
+        password,
+        confirmPassword,
+        email,
+      });
 
       console.log("Đăng ký thành công: ", response.data);
 

@@ -14,7 +14,10 @@ const BrandScreen = () => {
   const [selectedBrandId, setSelectedBrandId] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://admin-estore-l29q.onrender.com"
+      : "http://localhost:3000";
   const searchInput = useRef(null);
   const handleOpenAdd = () => {
     setIsModalAdd(true);
@@ -169,7 +172,7 @@ const BrandScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/brands");
+      const response = await axios.get(`${API_URL}/brands`);
       console.log("Dữ liệu nhận được từ API: ", response.data);
       if (response.data && Array.isArray(response.data.data)) {
         const formattedData = response.data.data.map((brand) => ({
@@ -206,7 +209,7 @@ const BrandScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/brands/${key}`);
+          await axios.delete(`${API_URL}/brands/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

@@ -21,10 +21,7 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -41,13 +38,15 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
   useEffect(() => {
     const fetchVariantsAndProduct = async () => {
       try {
-        const variantsResponse = await axios.get(`${API_URL}/variants`);
+        const variantsResponse = await axios.get(
+          "http://localhost:3000/variants"
+        );
         const variantsData = variantsResponse.data.data;
         setVariants(variantsData);
 
         if (productId) {
           const productResponse = await axios.get(
-            `${API_URL}/products/${productId}`
+            `http://localhost:3000/products/${productId}`
           );
           const productData = productResponse.data.data;
 
@@ -130,10 +129,10 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
         brandsResponse,
         variantTypesResponse,
       ] = await Promise.all([
-        axios.get(`${API_URL}/categories`),
-        axios.get(`${API_URL}/subCategories`),
-        axios.get(`${API_URL}/brands`),
-        axios.get(`${API_URL}/variantTypes`),
+        axios.get("http://localhost:3000/categories"),
+        axios.get("http://localhost:3000/subCategories"),
+        axios.get("http://localhost:3000/brands"),
+        axios.get("http://localhost:3000/variantTypes"),
       ]);
       setCategories(categoriesResponse.data.data);
       setSubcategories(subCategoriesResponse.data.data);
@@ -187,7 +186,7 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
         console.log(key, value);
       }
 
-      await axios.put(`${API_URL}/products/${productId}`, formData, {
+      await axios.put(`http://localhost:3000/products/${productId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

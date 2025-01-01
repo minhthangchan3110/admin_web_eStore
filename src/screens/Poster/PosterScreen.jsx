@@ -14,10 +14,6 @@ const PosterScreen = () => {
   const [isModalAdd, setIsModalAdd] = useState(false);
   const [isModalEdit, setIsModalEdit] = useState(false);
   const [selectedPosterId, setSelectedPosterId] = useState(null);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
   const searchInput = useRef(null);
   const handleOpenAdd = () => {
     setIsModalAdd(true);
@@ -121,7 +117,7 @@ const PosterScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/posters`);
+      const response = await axios.get("http://localhost:3000/posters");
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -159,7 +155,7 @@ const PosterScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`${API_URL}/posters/${key}`);
+          await axios.delete(`http://localhost:3000/posters/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

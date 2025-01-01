@@ -14,10 +14,7 @@ const TableScreen = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
 
   const searchInput = useRef(null);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const handleOpenModal = (productId) => {
     setSelectedProductId(productId);
     setIsModalVisible(true);
@@ -117,7 +114,7 @@ const TableScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/products`);
+        const response = await axios.get("http://localhost:3000/products");
 
         console.log("Dữ liệu nhận được từ API:", response.data);
 
@@ -163,7 +160,7 @@ const TableScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`${API_URL}/products/${key}`);
+          await axios.delete(`http://localhost:3000/products/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

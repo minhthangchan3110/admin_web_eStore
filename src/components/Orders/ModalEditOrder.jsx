@@ -4,15 +4,14 @@ import React, { useEffect } from "react";
 
 export default function ModalEditOrder({ visible, orderId, onClose }) {
   const [form] = Form.useForm();
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   useEffect(() => {
     const fetchOrderData = async () => {
       if (orderId) {
         try {
-          const orderRes = await axios.get(`${API_URL}/orders/${orderId}`);
+          const orderRes = await axios.get(
+            `http://localhost:3000/orders/${orderId}`
+          );
 
           const orderData = orderRes.data.data; // Lấy dữ liệu đơn hàng
 
@@ -43,7 +42,7 @@ export default function ModalEditOrder({ visible, orderId, onClose }) {
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `${API_URL}/orders/${orderId}`,
+        `http://localhost:3000/orders/${orderId}`,
         { ...values, orderStatus: values.orderStatus } // Đảm bảo orderStatus được gửi
       );
       console.log("API Response:", response.data);

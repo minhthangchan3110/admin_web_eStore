@@ -6,16 +6,15 @@ export default function SettingAdmin({ visible, onClose, userId }) {
   const [form] = Form.useForm();
   const [userData, setUserData] = useState(null);
   const [isChangePasswordEnabled, setIsChangePasswordEnabled] = useState(false); // State cho toggle
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   useEffect(() => {
     if (userId) {
       console.log("Fetching data for userId:", userId);
       const fetchUserData = async () => {
         try {
-          const userRes = await axios.get(`${API_URL}/users/${userId}`);
+          const userRes = await axios.get(
+            `http://localhost:3000/users/${userId}`
+          );
           setUserData(userRes.data.data);
           form.setFieldsValue({
             name: userRes.data.data.name || "",
@@ -68,7 +67,7 @@ export default function SettingAdmin({ visible, onClose, userId }) {
       }
 
       const response = await axios.put(
-        `${API_URL}/users/${userId}`,
+        `http://localhost:3000/users/${userId}`,
         dataToUpdate
       );
       console.log("API Response:", response.data);

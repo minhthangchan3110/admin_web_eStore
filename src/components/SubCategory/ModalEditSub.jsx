@@ -6,15 +6,14 @@ export default function ModalEditSub({ visible, onClose, subCategoryId }) {
   const [form] = Form.useForm();
   const [categories, setCategories] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState(null); // State lưu trữ dữ liệu sub-category
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   // Fetch categories khi component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categoriesRes = await axios.get(`${API_URL}/categories`);
+        const categoriesRes = await axios.get(
+          "http://localhost:3000/categories"
+        );
         setCategories(categoriesRes.data.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -29,7 +28,7 @@ export default function ModalEditSub({ visible, onClose, subCategoryId }) {
       const fetchSubCategory = async () => {
         try {
           const subCategoryRes = await axios.get(
-            `${API_URL}/subcategories/${subCategoryId}`
+            `http://localhost:3000/subcategories/${subCategoryId}`
           );
           setSubCategoryData(subCategoryRes.data.data); // Lưu dữ liệu sub-category
           // Điền dữ liệu vào form
@@ -51,7 +50,7 @@ export default function ModalEditSub({ visible, onClose, subCategoryId }) {
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `${API_URL}/subcategories/${subCategoryId}`,
+        `http://localhost:3000/subcategories/${subCategoryId}`,
         values
       );
       console.log("API Response:", response.data);

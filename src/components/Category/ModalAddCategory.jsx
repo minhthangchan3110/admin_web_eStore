@@ -9,10 +9,7 @@ export default function ModalAddCategory({ visible, onClose }) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const handleCancel = () => setPreviewVisible(false);
 
   const onPreview = async (file) => {
@@ -47,7 +44,7 @@ export default function ModalAddCategory({ visible, onClose }) {
       formData.append("name", values.name); // Gửi tên danh mục
 
       const response = await axios.post(
-        `${API_URL}:3000/categories`, // Đường dẫn API
+        "http://localhost:3000/categories", // Đường dẫn API
         formData,
         {
           headers: {

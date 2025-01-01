@@ -12,10 +12,7 @@ import { message } from "antd";
 export default function DashboardScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [data, setData] = useState([]);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
@@ -27,7 +24,7 @@ export default function DashboardScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/products`);
+        const response = await axios.get("http://localhost:3000/products");
 
         console.log("Dữ liệu nhận được từ API:", response.data);
 

@@ -7,10 +7,6 @@ export default function LoginScreen({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
 
   const navigate = useNavigate();
 
@@ -19,7 +15,7 @@ export default function LoginScreen({ onLogin }) {
     setError("");
 
     try {
-      const response = await axios.post(`${API_URL}/users/login`, {
+      const response = await axios.post("http://localhost:3000/users/login", {
         email,
         password,
       });

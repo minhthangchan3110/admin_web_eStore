@@ -10,15 +10,12 @@ export default function ModalEditPoster({ visible, onClose, posterId }) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const handleCancel = () => setPreviewVisible(false);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   useEffect(() => {
     if (visible && posterId) {
       // Fetch existing poster details
       axios
-        .get(`${API_URL}/posters/${posterId}`)
+        .get(`http://localhost:3000/posters/${posterId}`)
         .then((response) => {
           const { posterName, imageUrl } = response.data.data; // Sửa đổi ở đây
           console.log("Fetched poster data:", response.data.data);
@@ -70,12 +67,14 @@ export default function ModalEditPoster({ visible, onClose, posterId }) {
         formData.append("img", file.originFileObj); // Tên trường 'img' phải giống như trong backend
       } else {
         // Nếu không có ảnh mới, lấy ảnh cũ
-        const response = await axios.get(`${API_URL}/posters/${posterId}`);
+        const response = await axios.get(
+          `http://localhost:3000/posters/${posterId}`
+        );
         imageUrl = response.data.data.imageUrl; // Sửa đổi ở đây
         formData.append("image", imageUrl); // Sửa đổi ở đây
       }
 
-      await axios.put(`${API_URL}/posters/${posterId}`, formData, {
+      await axios.put(`http://localhost:3000/posters/${posterId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

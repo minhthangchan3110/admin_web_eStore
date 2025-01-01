@@ -6,14 +6,12 @@ export default function ModalEditVariants({ visible, onClose, variantId }) {
   const [form] = Form.useForm();
   const [variantType, setVariantType] = useState([]);
   const [variantData, setVariantData] = useState([]);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
   useEffect(() => {
     const fetchVariantsType = async () => {
       try {
-        const variantsTypeRes = await axios.get(`${API_URL}/varianttypes`);
+        const variantsTypeRes = await axios.get(
+          "http://localhost:3000/varianttypes"
+        );
         setVariantType(variantsTypeRes.data.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -26,7 +24,7 @@ export default function ModalEditVariants({ visible, onClose, variantId }) {
       const fetchSubCategory = async () => {
         try {
           const variantsRes = await axios.get(
-            `${API_URL}/variants/${variantId}`
+            `http://localhost:3000/variants/${variantId}`
           );
           setVariantData(variantsRes.data.data);
           form.setFieldsValue({
@@ -45,7 +43,7 @@ export default function ModalEditVariants({ visible, onClose, variantId }) {
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `${API_URL}/variants/${variantId}`,
+        `http://localhost:3000/variants/${variantId}`,
         values
       );
       console.log("API Response:", response.data);

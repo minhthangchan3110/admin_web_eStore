@@ -11,10 +11,7 @@ export default function ModalAddBrand({ visible, onClose }) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const handleCancel = () => setPreviewVisible(false);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -35,7 +32,9 @@ export default function ModalAddBrand({ visible, onClose }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const subcategoriesRes = await axios.get(`${API_URL}/subcategories`);
+        const subcategoriesRes = await axios.get(
+          "http://localhost:3000/subcategories"
+        );
         setSubCategories(subcategoriesRes.data.data);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu");
@@ -62,11 +61,15 @@ export default function ModalAddBrand({ visible, onClose }) {
       console.log("FormData:", formData);
 
       // Gửi dữ liệu lên API
-      const response = await axios.post(`${API_URL}/brands`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Đảm bảo gửi dữ liệu dưới dạng multipart
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:3000/brands",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Đảm bảo gửi dữ liệu dưới dạng multipart
+          },
+        }
+      );
       console.log("API Response: ", response.data);
       message.success({
         content: <span className="font-montserrat">Thêm hãng thành công</span>,

@@ -9,10 +9,6 @@ export default function ModalAddPoster({ visible, onClose }) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
   const handleCancel = () => setPreviewVisible(false);
   const onPreview = async (file) => {
     let src = file.url;
@@ -46,7 +42,7 @@ export default function ModalAddPoster({ visible, onClose }) {
       formData.append("posterName", values.posterName); // Gửi tên danh mục
 
       const response = await axios.post(
-        `${API_URL}/posters`, // Đường dẫn API
+        "http://localhost:3000/posters", // Đường dẫn API
         formData,
         {
           headers: {

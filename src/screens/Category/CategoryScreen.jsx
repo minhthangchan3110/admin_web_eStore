@@ -14,10 +14,7 @@ const CategoryScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -123,7 +120,7 @@ const CategoryScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/categories`);
+      const response = await axios.get("http://localhost:3000/categories");
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -171,7 +168,7 @@ const CategoryScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`${API_URL}/categories/${key}`);
+          await axios.delete(`http://localhost:3000/categories/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

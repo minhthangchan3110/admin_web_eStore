@@ -13,11 +13,6 @@ const UserScreen = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
   const searchInput = useRef(null);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
-
   const handleOpenModalEdit = (userId) => {
     setIsModalEdit(true);
     setSelectedUserId(userId);
@@ -170,7 +165,7 @@ const UserScreen = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token"); // Giả sử token được lưu trong localStorage
-      const response = await axios.get(`${API_URL}/users`, {
+      const response = await axios.get("http://localhost:3000/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -212,7 +207,7 @@ const UserScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`${API_URL}/users/${key}`);
+          await axios.delete(`http://localhost:3000/users/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

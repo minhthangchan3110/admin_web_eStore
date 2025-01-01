@@ -7,19 +7,15 @@ export default function ModalAddCoupon({ visible, onClose }) {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [categoriesRes, subCategoriesRes, productsRes] =
           await Promise.all([
-            axios.get(`${API_URL}/categories`),
-            axios.get(`${API_URL}/subcategories`),
-            axios.get(`${API_URL}/products`),
+            axios.get("http://localhost:3000/categories"),
+            axios.get("http://localhost:3000/subcategories"),
+            axios.get("http://localhost:3000/products"),
           ]);
         setCategories(categoriesRes.data.data);
         setSubCategories(subCategoriesRes.data.data);
@@ -34,7 +30,10 @@ export default function ModalAddCoupon({ visible, onClose }) {
   const onFinish = async (values) => {
     try {
       console.log("Sending data:", values);
-      const response = await axios.post(`${API_URL}/couponcodes`, values);
+      const response = await axios.post(
+        "http://localhost:3000/couponcodes",
+        values
+      );
       console.log("API Responsive: ", response.data);
       message.success({
         content: (

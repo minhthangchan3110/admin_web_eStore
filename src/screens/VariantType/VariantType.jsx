@@ -14,10 +14,6 @@ const VariantTypeScreen = () => {
   const [selectedVaritantType, setSelectedVaritantType] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
   const searchInput = useRef(null);
   ////
   const handleOpenAdd = () => {
@@ -124,7 +120,7 @@ const VariantTypeScreen = () => {
   /////
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/varianttypes`);
+      const response = await axios.get("http://localhost:3000/varianttypes");
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -163,7 +159,7 @@ const VariantTypeScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`${API_URL}/varianttypes/${key}`);
+          await axios.delete(`http://localhost:3000/varianttypes/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

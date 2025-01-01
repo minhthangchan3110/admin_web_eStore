@@ -39,10 +39,7 @@ const Coupons = () => {
     clearFilters();
     setSearchText("");
   };
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -120,7 +117,7 @@ const Coupons = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/couponcodes`);
+      const response = await axios.get("http://localhost:3000/couponcodes");
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -212,7 +209,7 @@ const Coupons = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`${API_URL}/couponcodes/${key}`);
+          await axios.delete(`http://localhost:3000/couponcodes/${key}`);
           message.success({
             content: (
               <span className="font-montserrat">

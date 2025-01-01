@@ -9,16 +9,13 @@ export default function ModalEditVariantType({
 }) {
   const [form] = Form.useForm();
   const [variantTypeData, setVariantTypeData] = useState(null);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   useEffect(() => {
     if (variantTypeId) {
       const fetchVariantType = async () => {
         try {
           const variantTypeRes = await axios.get(
-            `${API_URL}/varianttypes/${variantTypeId}`
+            `http://localhost:3000/varianttypes/${variantTypeId}`
           );
           setVariantTypeData(variantTypeRes.data.data); // Lưu dữ liệu variant type
           // Điền dữ liệu vào form
@@ -39,7 +36,7 @@ export default function ModalEditVariantType({
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `${API_URL}/varianttypes/${variantTypeId}`,
+        `http://localhost:3000/varianttypes/${variantTypeId}`,
         values // Gửi dữ liệu form cập nhật
       );
       console.log("API Response:", response.data);

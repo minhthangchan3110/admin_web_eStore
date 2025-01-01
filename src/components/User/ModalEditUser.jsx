@@ -5,15 +5,14 @@ import React, { useEffect, useState } from "react";
 export default function ModalEditUser({ visible, onClose, userId }) {
   const [form] = Form.useForm();
   const [userData, setUserData] = useState(null);
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://admin-estore-l29q.onrender.com"
-      : "http://localhost:3000";
+
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
         try {
-          const userRes = await axios.get(`${API_URL}/users/${userId}`);
+          const userRes = await axios.get(
+            `http://localhost:3000/users/${userId}`
+          );
           setUserData(userRes.data.data);
           form.setFieldsValue({
             userId: userRes.data.data._id || "",
@@ -35,7 +34,10 @@ export default function ModalEditUser({ visible, onClose, userId }) {
       console.log("Updating User ID:", userId);
       console.log("Sending updated data:", values);
 
-      const response = await axios.put(`${API_URL}/users/${userId}`, values);
+      const response = await axios.put(
+        `http://localhost:3000/users/${userId}`,
+        values
+      );
       console.log("API Response:", response.data);
       message.success({
         content: (

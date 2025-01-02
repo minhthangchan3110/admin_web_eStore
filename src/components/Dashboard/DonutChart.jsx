@@ -16,7 +16,9 @@ export default function DonutChart() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/orders"); // Địa chỉ API của bạn
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/orders`
+        ); // Địa chỉ API của bạn
         if (response.data.success) {
           // Lấy dữ liệu trạng thái đơn hàng từ API
           const orders = response.data.data;

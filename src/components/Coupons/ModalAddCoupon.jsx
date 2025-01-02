@@ -13,9 +13,9 @@ export default function ModalAddCoupon({ visible, onClose }) {
       try {
         const [categoriesRes, subCategoriesRes, productsRes] =
           await Promise.all([
-            axios.get("http://localhost:3000/categories"),
-            axios.get("http://localhost:3000/subcategories"),
-            axios.get("http://localhost:3000/products"),
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories`),
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`),
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`),
           ]);
         setCategories(categoriesRes.data.data);
         setSubCategories(subCategoriesRes.data.data);
@@ -31,7 +31,7 @@ export default function ModalAddCoupon({ visible, onClose }) {
     try {
       console.log("Sending data:", values);
       const response = await axios.post(
-        "http://localhost:3000/couponcodes",
+        `${process.env.REACT_APP_API_BASE_URL}/couponcodes`,
         values
       );
       console.log("API Responsive: ", response.data);

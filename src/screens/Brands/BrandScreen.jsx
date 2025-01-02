@@ -4,6 +4,7 @@ import { Button, Input, Modal, Space, Table, message } from "antd";
 import { IoIosAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
 import axios from "axios";
+import { IoReload } from "react-icons/io5";
 import ModalAddBrand from "../../components/Brands/ModalAddBrand";
 import { SearchOutlined } from "@ant-design/icons";
 import ModalEditBrand from "../../components/Brands/ModalEditBrand";
@@ -169,7 +170,9 @@ const BrandScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/brands");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/brands`
+      );
       console.log("Dữ liệu nhận được từ API: ", response.data);
       if (response.data && Array.isArray(response.data.data)) {
         const formattedData = response.data.data.map((brand) => ({
@@ -191,6 +194,10 @@ const BrandScreen = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleReload = () => {
+    fetchData();
+  };
   const handleDelete = async (key) => {
     Modal.confirm({
       title: (
@@ -206,7 +213,9 @@ const BrandScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/brands/${key}`);
+          await axios.delete(
+            `${process.env.REACT_APP_API_BASE_URL}/brands/${key}`
+          );
           message.success({
             content: (
               <span className="font-montserrat">
@@ -236,12 +245,17 @@ const BrandScreen = () => {
     <div className=" font-montserrat my-4">
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg">My Brands</h2>
-        <div
-          onClick={handleOpenAdd}
-          className="flex items-center gap-2 bg-green-500 font-semibold text-white p-2 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-green-700"
-        >
-          <IoIosAdd size={24} />
-          <div>Add New</div>
+        <div className="flex items-center gap-2">
+          <div
+            onClick={handleOpenAdd}
+            className="flex items-center gap-2 bg-green-500 font-semibold text-white p-2 rounded-lg shadow-md cursor-pointer duration-200 hover:bg-green-700"
+          >
+            <IoIosAdd size={24} />
+            <div>Add New</div>
+          </div>
+          <div onClick={handleReload} className="cursor-pointer">
+            <IoReload size={20} />
+          </div>
         </div>
       </div>
       <Table

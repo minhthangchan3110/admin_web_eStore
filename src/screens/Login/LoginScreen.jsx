@@ -15,10 +15,13 @@ export default function LoginScreen({ onLogin }) {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:3000/users/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/users/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       const { role, name, _id } = response.data.data;
 

@@ -42,7 +42,7 @@ export default function ModalAddPoster({ visible, onClose }) {
       formData.append("posterName", values.posterName); // Gửi tên danh mục
 
       const response = await axios.post(
-        "http://localhost:3000/posters", // Đường dẫn API
+        `${process.env.REACT_APP_API_BASE_URL}/posters`, // Đường dẫn API
         formData,
         {
           headers: {

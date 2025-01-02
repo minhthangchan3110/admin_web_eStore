@@ -10,7 +10,7 @@ export default function ModalAddVariantType({ visible, onClose }) {
       console.log("Sending data:", values);
 
       const response = await axios.post(
-        "http://localhost:3000/varianttypes",
+        `${process.env.REACT_APP_API_BASE_URL}/varianttypes`,
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);

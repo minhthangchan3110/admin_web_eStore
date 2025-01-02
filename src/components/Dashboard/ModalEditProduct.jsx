@@ -39,14 +39,14 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
     const fetchVariantsAndProduct = async () => {
       try {
         const variantsResponse = await axios.get(
-          "http://localhost:3000/variants"
+          `${process.env.REACT_APP_API_BASE_URL}/variants`
         );
         const variantsData = variantsResponse.data.data;
         setVariants(variantsData);
 
         if (productId) {
           const productResponse = await axios.get(
-            `http://localhost:3000/products/${productId}`
+            `${process.env.REACT_APP_API_BASE_URL}/products/${productId}`
           );
           const productData = productResponse.data.data;
 
@@ -129,10 +129,10 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
         brandsResponse,
         variantTypesResponse,
       ] = await Promise.all([
-        axios.get("http://localhost:3000/categories"),
-        axios.get("http://localhost:3000/subCategories"),
-        axios.get("http://localhost:3000/brands"),
-        axios.get("http://localhost:3000/variantTypes"),
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories`),
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/subCategories`),
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/brands`),
+        axios.get(`${process.env.REACT_APP_API_BASE_URL}/variantTypes`),
       ]);
       setCategories(categoriesResponse.data.data);
       setSubcategories(subCategoriesResponse.data.data);
@@ -186,11 +186,15 @@ export default function ModalEditProduct({ visible, onClose, productId }) {
         console.log(key, value);
       }
 
-      await axios.put(`http://localhost:3000/products/${productId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL}/products/${productId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       message.success("Cập nhật sản phẩm thành công");
       onClose();
     } catch (error) {

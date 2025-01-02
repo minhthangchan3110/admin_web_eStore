@@ -165,11 +165,14 @@ const UserScreen = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem("token"); // Giả sử token được lưu trong localStorage
-      const response = await axios.get("http://localhost:3000/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("Dữ liệu nhận được từ API: ", response.data);
       if (response.data && Array.isArray(response.data.data)) {
         const formattedData = response.data.data.map((user) => ({
@@ -207,7 +210,9 @@ const UserScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/users/${key}`);
+          await axios.delete(
+            `${process.env.REACT_APP_API_BASE_URL}/users/${key}`
+          );
           message.success({
             content: (
               <span className="font-montserrat">

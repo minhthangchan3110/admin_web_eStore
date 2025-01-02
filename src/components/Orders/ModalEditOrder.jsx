@@ -1,49 +1,53 @@
 import { Button, Form, Modal } from "antd";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ModalEditOrder({ visible, orderId, onClose }) {
   const [form] = Form.useForm();
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     const fetchOrderData = async () => {
       if (orderId) {
         try {
           const orderRes = await axios.get(
-            `http://localhost:3000/orders/${orderId}`
+            `${process.env.REACT_APP_API_BASE_URL}/orders/${orderId}`
           );
 
-          const orderData = orderRes.data.data; // Lấy dữ liệu đơn hàng
+          const data = orderRes.data.data;
+          setOrderData(data); // Lưu dữ liệu vào state
 
           // Thiết lập giá trị cho form
           form.setFieldsValue({
-            userID: orderData.userID, // ID người dùng
-            orderDate: orderData.orderDate,
-            orderStatus: orderData.orderStatus,
-            items: orderData.items,
-            totalPrice: orderData.totalPrice,
-            shippingAddress: orderData.shippingAddress,
-            paymentMethod: orderData.paymentMethod,
-            couponCode: orderData.couponCode,
-            orderTotal: orderData.orderTotal,
+            userID: data.userID,
+            orderDate: data.orderDate,
+            orderStatus: data.orderStatus,
+            items: data.items,
+            totalPrice: data.totalPrice,
+            shippingAddress: data.shippingAddress,
+            paymentMethod: data.paymentMethod,
+            couponCode: data.couponCode,
+            orderTotal: data.orderTotal,
           });
 
-          console.log("Form values:", form.getFieldsValue()); // Kiểm tra dữ liệu đã set vào form
+          console.log("Form values:", form.getFieldsValue());
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu: ", error);
         }
       }
     };
 
-    fetchOrderData();
-  }, [orderId, form]);
+    if (visible) {
+      fetchOrderData();
+    }
+  }, [orderId, visible, form]);
+
   const onFinish = async (values) => {
     try {
       console.log("Sending updated data:", values);
-
       const response = await axios.put(
-        `http://localhost:3000/orders/${orderId}`,
-        { ...values, orderStatus: values.orderStatus } // Đảm bảo orderStatus được gửi
+        `${process.env.REACT_APP_API_BASE_URL}/orders/${orderId}`,
+        { ...values, orderStatus: values.orderStatus }
       );
       console.log("API Response:", response.data);
       onClose();
@@ -63,77 +67,78 @@ export default function ModalEditOrder({ visible, orderId, onClose }) {
       footer={null}
     >
       <Form form={form} className="flex flex-col gap-4" onFinish={onFinish}>
-        <section className="font-montserrat flex justify-between">
-          <div className="flex justify-start w-1/2">
-            User ID:{" "}
-            <span className="px-4 font-semibold">
-              {form.getFieldValue("userID")?.name ||
-                form.getFieldValue("userID")}
-            </span>
-          </div>
-          <div className="flex justify-start w-1/2">
-            Order Date:{" "}
-            <span className="px-4 font-semibold">
-              {new Date(form.getFieldValue("orderDate")).toLocaleString()}
-            </span>
-          </div>
-        </section>
-        <section className="border-2 border-black bg-slate-100 rounded-md p-4 font-montserrat flex flex-col gap-2">
-          <h3 className=" font-semibold text-blue-500">Items</h3>
-          <div>
-            {form.getFieldValue("items")?.map((item, index) => (
-              <div key={index} className="flex gap-8 font-semibold">
-                <span>{item.productName}:</span>
-                <span>
-                  {item.quantity} x ${item.price}
+        {orderData ? (
+          <>
+            <section className="font-montserrat flex">
+              <div className="flex justify-start w-1/2">
+                Order Date:{" "}
+                <span className="px-4 font-semibold">
+                  {new Date(orderData.orderDate).toLocaleString()}
                 </span>
               </div>
-            ))}
-          </div>
-          <div className="font-semibold flex gap-8">
-            Total Price:{" "}
-            <span className="text-green-500">
-              ${form.getFieldValue("totalPrice")}
-            </span>
-          </div>
-        </section>
-        <section className="border-2 border-black bg-slate-100 rounded-md p-4 font-montserrat flex flex-col gap-2">
-          <h3 className="font-semibold text-blue-500">Shipping Address</h3>
-          <div className="flex gap-8 font-semibold">
-            Phone: <span>{form.getFieldValue("shippingAddress")?.phone}</span>
-          </div>
-          <div className="flex gap-8 font-semibold">
-            Address:{" "}
-            <span>
-              {form.getFieldValue("shippingAddress")?.street},{" "}
-              {form.getFieldValue("shippingAddress")?.city},{" "}
-              {form.getFieldValue("shippingAddress")?.state}{" "}
-              {form.getFieldValue("shippingAddress")?.postalCode},{" "}
-              {form.getFieldValue("shippingAddress")?.country}
-            </span>
-          </div>
-        </section>
-        <section className="border-2 border-black bg-slate-100 rounded-md p-4 font-montserrat flex flex-col gap-2">
-          <h3 className="font-semibold text-blue-500">Payment Details</h3>
-          <div className="gap-8 flex font-semibold">
-            Payment Method: <span>{form.getFieldValue("paymentMethod")}</span>
-          </div>
-          <div className="gap-8 flex font-semibold">
-            Code: <span>{form.getFieldValue("couponCode")}</span>
-          </div>
-          <div className="gap-8 flex font-semibold">
-            Subtotal: <span>${form.getFieldValue("orderTotal")?.subtotal}</span>
-          </div>
-          <div className="gap-8 flex font-semibold">
-            Discount: <span>${form.getFieldValue("orderTotal")?.discount}</span>
-          </div>
-          <div className="gap-8 flex font-semibold">
-            Total:{" "}
-            <span className="text-green-500">
-              ${form.getFieldValue("orderTotal")?.total}
-            </span>
-          </div>
-        </section>
+            </section>
+            <section className="border-2 border-black bg-slate-100 rounded-md p-4 font-montserrat flex flex-col gap-2">
+              <h3 className="font-semibold text-blue-500">Items</h3>
+              <div>
+                {orderData.items?.map((item, index) => (
+                  <div key={index} className="flex gap-8 font-semibold">
+                    <span>{item.productName}:</span>
+                    <span>
+                      {item.quantity} x {item.price}₫
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="font-semibold flex gap-8">
+                Total Price:{" "}
+                <span className="text-green-500">{orderData.totalPrice}₫</span>
+              </div>
+            </section>
+            <section className="border-2 border-black bg-slate-100 rounded-md p-4 font-montserrat flex flex-col gap-2">
+              <h3 className="font-semibold text-blue-500">Shipping Address</h3>
+              <div className="flex gap-8 font-semibold">
+                Full Name: <span>{orderData.shippingAddress?.fullName}</span>
+              </div>
+              <div className="flex gap-8 font-semibold">
+                Phone: <span>{orderData.shippingAddress?.phone}</span>
+              </div>
+              <div className="flex gap-8 font-semibold">
+                Address:{" "}
+                <span>
+                  {orderData.shippingAddress?.street},{" "}
+                  {orderData.shippingAddress?.city},{" "}
+                  {orderData.shippingAddress?.state}{" "}
+                  {orderData.shippingAddress?.postalCode},{" "}
+                  {orderData.shippingAddress?.country}
+                </span>
+              </div>
+            </section>
+            <section className="border-2 border-black bg-slate-100 rounded-md p-4 font-montserrat flex flex-col gap-2">
+              <h3 className="font-semibold text-blue-500">Payment Details</h3>
+              <div className="gap-8 flex font-semibold">
+                Payment Method: <span>{orderData.paymentMethod}</span>
+              </div>
+              <div className="gap-8 flex font-semibold">
+                Code: <span>{orderData.couponCode?.couponCode}</span>
+              </div>
+              <div className="gap-8 flex font-semibold">
+                Subtotal: <span>{orderData.orderTotal?.subtotal}₫</span>
+              </div>
+              <div className="gap-8 flex font-semibold">
+                Discount: <span>{orderData.orderTotal?.discount}₫</span>
+              </div>
+              <div className="gap-8 flex font-semibold">
+                Total:{" "}
+                <span className="text-green-500">
+                  {orderData.orderTotal?.total}₫
+                </span>
+              </div>
+            </section>
+          </>
+        ) : (
+          <div>Loading...</div> // Thêm thông báo khi dữ liệu đang được tải
+        )}
+
         <Form.Item
           name="orderStatus"
           rules={[{ required: true, message: "Order Status required." }]}

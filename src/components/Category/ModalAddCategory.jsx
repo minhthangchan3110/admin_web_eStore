@@ -44,7 +44,7 @@ export default function ModalAddCategory({ visible, onClose }) {
       formData.append("name", values.name); // Gửi tên danh mục
 
       const response = await axios.post(
-        "http://localhost:3000/categories", // Đường dẫn API
+        `${process.env.REACT_APP_API_BASE_URL}/categories`, // Đường dẫn API
         formData,
         {
           headers: {

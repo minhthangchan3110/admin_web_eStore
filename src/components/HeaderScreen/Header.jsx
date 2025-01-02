@@ -30,7 +30,9 @@ export default function Header() {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/users/${userId}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
+      );
 
       // Sử dụng avatar từ DB hoặc avatar mặc định
     } catch (error) {

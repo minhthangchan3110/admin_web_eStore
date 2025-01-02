@@ -15,7 +15,7 @@ export default function ModalEditVariantType({
       const fetchVariantType = async () => {
         try {
           const variantTypeRes = await axios.get(
-            `http://localhost:3000/varianttypes/${variantTypeId}`
+            `${process.env.REACT_APP_API_BASE_URL}/varianttypes/${variantTypeId}`
           );
           setVariantTypeData(variantTypeRes.data.data); // Lưu dữ liệu variant type
           // Điền dữ liệu vào form
@@ -36,7 +36,7 @@ export default function ModalEditVariantType({
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `http://localhost:3000/varianttypes/${variantTypeId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/varianttypes/${variantTypeId}`,
         values // Gửi dữ liệu form cập nhật
       );
       console.log("API Response:", response.data);

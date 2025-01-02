@@ -15,7 +15,7 @@ export default function ModalEditCategory({ visible, onClose, categoryId }) {
     if (visible && categoryId) {
       // Fetch existing category details
       axios
-        .get(`http://localhost:3000/categories/${categoryId}`)
+        .get(`${process.env.REACT_APP_API_BASE_URL}/categories/${categoryId}`)
         .then((response) => {
           const { name, image } = response.data.data;
           console.log("Fetched category data:", response.data.data); // Log dữ liệu danh mục
@@ -67,14 +67,14 @@ export default function ModalEditCategory({ visible, onClose, categoryId }) {
         formData.append("img", file.originFileObj);
       } else {
         const response = await axios.get(
-          `http://localhost:3000/categories/${categoryId}`
+          `${process.env.REACT_APP_API_BASE_URL}/categories/${categoryId}`
         );
         image = response.data.data.image;
         formData.append("image", image);
       }
 
       await axios.put(
-        `http://localhost:3000/categories/${categoryId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/categories/${categoryId}`,
         formData,
         {
           headers: {

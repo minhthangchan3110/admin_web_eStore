@@ -13,7 +13,7 @@ export default function SettingAdmin({ visible, onClose, userId }) {
       const fetchUserData = async () => {
         try {
           const userRes = await axios.get(
-            `http://localhost:3000/users/${userId}`
+            `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
           );
           setUserData(userRes.data.data);
           form.setFieldsValue({
@@ -67,7 +67,7 @@ export default function SettingAdmin({ visible, onClose, userId }) {
       }
 
       const response = await axios.put(
-        `http://localhost:3000/users/${userId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,
         dataToUpdate
       );
       console.log("API Response:", response.data);

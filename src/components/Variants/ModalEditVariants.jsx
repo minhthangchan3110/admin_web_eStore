@@ -10,7 +10,7 @@ export default function ModalEditVariants({ visible, onClose, variantId }) {
     const fetchVariantsType = async () => {
       try {
         const variantsTypeRes = await axios.get(
-          "http://localhost:3000/varianttypes"
+          `${process.env.REACT_APP_API_BASE_URL}/varianttypes`
         );
         setVariantType(variantsTypeRes.data.data);
       } catch (error) {
@@ -24,7 +24,7 @@ export default function ModalEditVariants({ visible, onClose, variantId }) {
       const fetchSubCategory = async () => {
         try {
           const variantsRes = await axios.get(
-            `http://localhost:3000/variants/${variantId}`
+            `${process.env.REACT_APP_API_BASE_URL}/variants/${variantId}`
           );
           setVariantData(variantsRes.data.data);
           form.setFieldsValue({
@@ -43,7 +43,7 @@ export default function ModalEditVariants({ visible, onClose, variantId }) {
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `http://localhost:3000/variants/${variantId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/variants/${variantId}`,
         values
       );
       console.log("API Response:", response.data);

@@ -11,7 +11,7 @@ export default function ModalEditUser({ visible, onClose, userId }) {
       const fetchUserData = async () => {
         try {
           const userRes = await axios.get(
-            `http://localhost:3000/users/${userId}`
+            `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
           );
           setUserData(userRes.data.data);
           form.setFieldsValue({
@@ -35,7 +35,7 @@ export default function ModalEditUser({ visible, onClose, userId }) {
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `http://localhost:3000/users/${userId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,
         values
       );
       console.log("API Response:", response.data);

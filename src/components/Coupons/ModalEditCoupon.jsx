@@ -14,9 +14,9 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
       try {
         const [categoriesRes, subCategoriesRes, productsRes] =
           await Promise.all([
-            axios.get("http://localhost:3000/categories"),
-            axios.get("http://localhost:3000/subcategories"),
-            axios.get("http://localhost:3000/products"),
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories`),
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`),
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`),
           ]);
         setCategories(categoriesRes.data.data);
         setSubCategories(subCategoriesRes.data.data);
@@ -32,7 +32,7 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
       const fetchCouponCodeData = async () => {
         try {
           const couponCodeRes = await axios.get(
-            `http://localhost:3000/couponcodes/${couponCodeId}`
+            `${process.env.REACT_APP_API_BASE_URL}/couponcodes/${couponCodeId}`
           );
 
           const couponData = couponCodeRes.data.data; // Lấy dữ liệu coupon
@@ -86,7 +86,7 @@ export default function ModalEditCoupon({ visible, onClose, couponCodeId }) {
     try {
       console.log("Sending data:", updatedValues);
       const response = await axios.put(
-        `http://localhost:3000/couponcodes/${couponCodeId}`, // Sửa URL nếu cần dùng edit
+        `${process.env.REACT_APP_API_BASE_URL}/couponcodes/${couponCodeId}`, // Sửa URL nếu cần dùng edit
         updatedValues
       );
       console.log("API Responsive: ", response.data);

@@ -17,7 +17,7 @@ export default function ModalEditBrand({ visible, onClose, brandId }) {
     const fetchSubCategories = async () => {
       try {
         const subCategoriesRes = await axios.get(
-          "http://localhost:3000/subcategories"
+          `${process.env.REACT_APP_API_BASE_URL}/subcategories`
         );
         console.log("Subcategories Data:", subCategoriesRes.data); // Log dữ liệu để kiểm tra
         setSubCategories(subCategoriesRes.data.data);
@@ -35,7 +35,7 @@ export default function ModalEditBrand({ visible, onClose, brandId }) {
       const fetchBrandData = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/brands/${brandId}`
+            `${process.env.REACT_APP_API_BASE_URL}/brands/${brandId}`
           );
           const { name, image, subcategoryId } = response.data.data;
           console.log("Fetched brand data:", response.data.data); // Log brand data
@@ -116,7 +116,7 @@ export default function ModalEditBrand({ visible, onClose, brandId }) {
       } else {
         // Nếu không có ảnh mới, lấy ảnh cũ từ server
         const response = await axios.get(
-          `http://localhost:3000/brands/${brandId}`
+          `${process.env.REACT_APP_API_BASE_URL}/brands/${brandId}`
         );
         const image = response.data.data.image;
         if (image) {
@@ -133,11 +133,15 @@ export default function ModalEditBrand({ visible, onClose, brandId }) {
       }
 
       // Gửi yêu cầu PUT
-      await axios.put(`http://localhost:3000/brands/${brandId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL}/brands/${brandId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       message.success({
         content: (

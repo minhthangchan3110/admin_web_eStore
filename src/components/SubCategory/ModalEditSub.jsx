@@ -12,7 +12,7 @@ export default function ModalEditSub({ visible, onClose, subCategoryId }) {
     const fetchCategories = async () => {
       try {
         const categoriesRes = await axios.get(
-          "http://localhost:3000/categories"
+          `${process.env.REACT_APP_API_BASE_URL}/categories`
         );
         setCategories(categoriesRes.data.data);
       } catch (error) {
@@ -28,7 +28,7 @@ export default function ModalEditSub({ visible, onClose, subCategoryId }) {
       const fetchSubCategory = async () => {
         try {
           const subCategoryRes = await axios.get(
-            `http://localhost:3000/subcategories/${subCategoryId}`
+            `${process.env.REACT_APP_API_BASE_URL}/subcategories/${subCategoryId}`
           );
           setSubCategoryData(subCategoryRes.data.data); // Lưu dữ liệu sub-category
           // Điền dữ liệu vào form
@@ -50,7 +50,7 @@ export default function ModalEditSub({ visible, onClose, subCategoryId }) {
       console.log("Sending updated data:", values);
 
       const response = await axios.put(
-        `http://localhost:3000/subcategories/${subCategoryId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/subcategories/${subCategoryId}`,
         values
       );
       console.log("API Response:", response.data);

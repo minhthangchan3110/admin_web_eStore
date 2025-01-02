@@ -114,7 +114,9 @@ const TableScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/products");
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/products `
+        );
 
         console.log("Dữ liệu nhận được từ API:", response.data);
 
@@ -160,7 +162,9 @@ const TableScreen = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/products/${key}`);
+          await axios.delete(
+            `${process.env.REACT_APP_API_BASE_URL}/products/${key}`
+          );
           message.success({
             content: (
               <span className="font-montserrat">

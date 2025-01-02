@@ -49,11 +49,11 @@ export default function ModalAddProduct({ visible, onClose }) {
           variantTypesRes,
           variantsRes,
         ] = await Promise.all([
-          axios.get("http://localhost:3000/categories"),
-          axios.get("http://localhost:3000/subCategories"),
-          axios.get("http://localhost:3000/brands"),
-          axios.get("http://localhost:3000/variantTypes"),
-          axios.get("http://localhost:3000/variants"),
+          axios.get(`${process.env.REACT_APP_API_BASE_URL}/categories`),
+          axios.get(`${process.env.REACT_APP_API_BASE_URL}/subCategories`),
+          axios.get(`${process.env.REACT_APP_API_BASE_URL}/brands`),
+          axios.get(`${process.env.REACT_APP_API_BASE_URL}/variantTypes`),
+          axios.get(`${process.env.REACT_APP_API_BASE_URL}/variants`),
         ]);
 
         setCategories(categoriesRes.data.data);
@@ -115,7 +115,7 @@ export default function ModalAddProduct({ visible, onClose }) {
       }
 
       const response = await axios.post(
-        "http://localhost:3000/products",
+        `${process.env.REACT_APP_API_BASE_URL}/products`,
         formData,
         {
           headers: {

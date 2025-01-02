@@ -10,7 +10,7 @@ export default function ModalAddSub({ visible, onClose }) {
     const fetchData = async () => {
       try {
         const categoriesRes = await axios.get(
-          "http://localhost:3000/categories"
+          `${process.env.REACT_APP_API_BASE_URL}/categories`
         );
         setCategories(categoriesRes.data.data);
       } catch (error) {
@@ -26,7 +26,7 @@ export default function ModalAddSub({ visible, onClose }) {
       console.log("Sending data:", values);
 
       const response = await axios.post(
-        "http://localhost:3000/subcategories",
+        `${process.env.REACT_APP_API_BASE_URL}/subcategories`,
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);

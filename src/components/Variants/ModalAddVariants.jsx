@@ -10,7 +10,7 @@ export default function ModalAddVariants({ visible, onClose }) {
     const fetchData = async () => {
       try {
         const variantTypesRes = await axios.get(
-          "http://localhost:3000/variantTypes"
+          `${process.env.REACT_APP_API_BASE_URL}/variantTypes`
         );
         setVariantType(variantTypesRes.data.data);
       } catch (error) {
@@ -26,7 +26,7 @@ export default function ModalAddVariants({ visible, onClose }) {
       console.log("Sending data:", values);
 
       const response = await axios.post(
-        "http://localhost:3000/variants",
+        `${process.env.REACT_APP_API_BASE_URL}/variants`,
         values // Gửi dữ liệu dưới dạng đối tượng JSON
       );
       console.log("API Response:", response.data);

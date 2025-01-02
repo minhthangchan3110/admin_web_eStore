@@ -15,7 +15,7 @@ export default function ModalEditPoster({ visible, onClose, posterId }) {
     if (visible && posterId) {
       // Fetch existing poster details
       axios
-        .get(`http://localhost:3000/posters/${posterId}`)
+        .get(`${process.env.REACT_APP_API_BASE_URL}/posters/${posterId}`)
         .then((response) => {
           const { posterName, imageUrl } = response.data.data; // Sửa đổi ở đây
           console.log("Fetched poster data:", response.data.data);
@@ -68,17 +68,21 @@ export default function ModalEditPoster({ visible, onClose, posterId }) {
       } else {
         // Nếu không có ảnh mới, lấy ảnh cũ
         const response = await axios.get(
-          `http://localhost:3000/posters/${posterId}`
+          `${process.env.REACT_APP_API_BASE_URL}/posters/${posterId}`
         );
         imageUrl = response.data.data.imageUrl; // Sửa đổi ở đây
         formData.append("image", imageUrl); // Sửa đổi ở đây
       }
 
-      await axios.put(`http://localhost:3000/posters/${posterId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL}/posters/${posterId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       message.success({
         content: (

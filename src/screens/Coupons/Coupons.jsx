@@ -117,7 +117,9 @@ const Coupons = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/couponcodes");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/couponcodes`
+      );
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
@@ -209,7 +211,9 @@ const Coupons = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/couponcodes/${key}`);
+          await axios.delete(
+            `${process.env.REACT_APP_API_BASE_URL}/couponcodes/${key}`
+          );
           message.success({
             content: (
               <span className="font-montserrat">

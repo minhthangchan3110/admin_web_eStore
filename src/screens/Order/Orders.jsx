@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Modal, Space, Table, message } from "antd";
 import { MdDelete, MdEdit } from "react-icons/md";
 import axios from "axios";
+import { IoReload } from "react-icons/io5";
 import ModalEditOrder from "../../components/Orders/ModalEditOrder";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -111,13 +112,15 @@ const Orders = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/orders");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/orders`
+      );
       console.log("Dữ liệu nhận được từ API: ", response.data);
 
       if (response.data && Array.isArray(response.data.data)) {
         const formattedData = response.data.data.map((order) => ({
           key: order._id,
-          name: order.userID ? order.userID.name : "Unknown",
+          email: order.userID ? order.userID.email : "Unknown",
           amount: order.totalPrice,
           paymentMethod: order.paymentMethod,
           status: order.orderStatus,
@@ -143,13 +146,15 @@ const Orders = () => {
   useEffect(() => {
     fetchData();
   }, [filter]); // Thêm filter vào dependency array
-
+  const handleReload = () => {
+    fetchData();
+  };
   const columns = [
     {
-      title: "Customer Name",
-      dataIndex: "name",
-      key: "name",
-      ...getColumnSearchProps("name"),
+      title: "Customer Email",
+      dataIndex: "email",
+      key: "email",
+      ...getColumnSearchProps("email"),
       className: "font-montserrat",
       render: (text) => <a className="font-montserrat">{text}</a>,
     },
@@ -221,7 +226,9 @@ const Orders = () => {
       cancelText: <span className="font-montserrat">Hủy bỏ</span>,
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/orders/${key}`);
+          await axios.delete(
+            `${process.env.REACT_APP_API_BASE_URL}/orders/${key}`
+          );
           message.success({
             content: (
               <span className="font-montserrat">
@@ -251,19 +258,24 @@ const Orders = () => {
     <div className="font-montserrat my-4">
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg">My Orders</h2>
-        <div>
-          <select
-            className="border font-montserrat border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="all">All orders</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+        <div className="flex items-center gap-2">
+          <div>
+            <select
+              className="border font-montserrat border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="all">All orders</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div onClick={handleReload} className="cursor-pointer">
+            <IoReload size={20} />
+          </div>
         </div>
       </div>
       <Table

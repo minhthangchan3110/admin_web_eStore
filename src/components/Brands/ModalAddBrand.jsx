@@ -33,7 +33,7 @@ export default function ModalAddBrand({ visible, onClose }) {
     const fetchData = async () => {
       try {
         const subcategoriesRes = await axios.get(
-          "http://localhost:3000/subcategories"
+          `${process.env.REACT_APP_API_BASE_URL}/subcategories`
         );
         setSubCategories(subcategoriesRes.data.data);
       } catch (error) {
@@ -62,7 +62,7 @@ export default function ModalAddBrand({ visible, onClose }) {
 
       // Gửi dữ liệu lên API
       const response = await axios.post(
-        "http://localhost:3000/brands",
+        `${process.env.REACT_APP_API_BASE_URL}/brands`,
         formData,
         {
           headers: {

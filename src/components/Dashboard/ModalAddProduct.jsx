@@ -5,6 +5,8 @@ import axios from "axios";
 const { TextArea } = Input;
 
 export default function ModalAddProduct({ visible, onClose }) {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -16,7 +18,23 @@ export default function ModalAddProduct({ visible, onClose }) {
   const [variants, setVariants] = useState([]);
   const [filteredVariants, setFilteredVariants] = useState([]);
   const [selectedVariantType, setSelectedVariantType] = useState("");
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
+  const [filteredBrands, setFilteredBrands] = useState([]);
 
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+    setFilteredSubCategories(
+      subCategories.filter((sub) => sub.categoryId === value)
+    );
+    setSelectedSubCategory(null); // reset subCategory khi thay đổi category
+    setFilteredBrands([]); // reset brands
+  };
+
+  // Khi subCategory thay đổi, lọc lại brands
+  const handleSubCategoryChange = (value) => {
+    setSelectedSubCategory(value);
+    setFilteredBrands(brands.filter((brand) => brand.subCategoryId === value));
+  };
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
@@ -208,6 +226,7 @@ export default function ModalAddProduct({ visible, onClose }) {
             <select
               id="proCategoryId"
               className="border font-montserrat border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              onChange={(e) => handleCategoryChange(e.target.value)}
             >
               <option value="">Select Category</option>
               {categories.map((category) => (
@@ -217,15 +236,16 @@ export default function ModalAddProduct({ visible, onClose }) {
               ))}
             </select>
           </Form.Item>
-          <Form.Item name="proSubCategoryId" className="w-1/3">
+          <Form.Item name="proBrandId" className="w-1/3">
             <select
-              id="proSubCategoryId"
+              id="proBrandId"
               className="border font-montserrat border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              disabled={!selectedSubCategory}
             >
-              <option value="">Select Sub Category</option>
-              {subCategories.map((subCategory) => (
-                <option key={subCategory._id} value={subCategory._id}>
-                  {subCategory.name}
+              <option value="">Select Brand</option>
+              {filteredBrands.map((brand) => (
+                <option key={brand._id} value={brand._id}>
+                  {brand.name}
                 </option>
               ))}
             </select>

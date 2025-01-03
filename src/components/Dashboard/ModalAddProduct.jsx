@@ -22,14 +22,12 @@ export default function ModalAddProduct({ visible, onClose }) {
   const [filteredBrands, setFilteredBrands] = useState([]);
 
   const handleCategoryChange = (value) => {
-    setSelectedCategory(value);
-    setFilteredSubCategories(
-      subCategories.filter((sub) => sub.categoryId === value)
+    // Lọc subcategories tương ứng với category đã chọn
+    const filteredSubCategories = subCategories.filter(
+      (subCategory) => subCategory.categoryId === value
     );
-    setSelectedSubCategory(null); // reset subCategory khi thay đổi category
-    setFilteredBrands([]); // reset brands
+    setSubCategories(filteredSubCategories);
   };
-
   // Khi subCategory thay đổi, lọc lại brands
   const handleSubCategoryChange = (value) => {
     setSelectedSubCategory(value);
@@ -236,15 +234,14 @@ export default function ModalAddProduct({ visible, onClose }) {
               ))}
             </select>
           </Form.Item>
+
           <Form.Item name="proSubCategoryId" className="w-1/3">
             <select
               id="proSubCategoryId"
               className="border font-montserrat border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              onChange={(e) => handleSubCategoryChange(e.target.value)}
-              disabled={!selectedCategory}
             >
               <option value="">Select Sub Category</option>
-              {filteredSubCategories.map((subCategory) => (
+              {subCategories.map((subCategory) => (
                 <option key={subCategory._id} value={subCategory._id}>
                   {subCategory.name}
                 </option>

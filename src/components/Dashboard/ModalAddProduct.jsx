@@ -236,16 +236,17 @@ export default function ModalAddProduct({ visible, onClose }) {
               ))}
             </select>
           </Form.Item>
-          <Form.Item name="proBrandId" className="w-1/3">
+          <Form.Item name="proSubCategoryId" className="w-1/3">
             <select
-              id="proBrandId"
+              id="proSubCategoryId"
               className="border font-montserrat border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              disabled={!selectedSubCategory}
+              onChange={(e) => handleSubCategoryChange(e.target.value)}
+              disabled={!selectedCategory}
             >
-              <option value="">Select Brand</option>
-              {filteredBrands.map((brand) => (
-                <option key={brand._id} value={brand._id}>
-                  {brand.name}
+              <option value="">Select Sub Category</option>
+              {filteredSubCategories.map((subCategory) => (
+                <option key={subCategory._id} value={subCategory._id}>
+                  {subCategory.name}
                 </option>
               ))}
             </select>
